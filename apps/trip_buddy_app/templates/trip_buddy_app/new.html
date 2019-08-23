@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Trip Buddy (Add a new trip) </title>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'trip_buddy_app/css/style.css' %}">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    </head>
+    <body class="container-fluid">
+        <div class="row mt-30 mb-30">
+            <h2 class="col-sm-7 offset-sm-1">Hello {{request.session.user_fname}}!
+                 Create a trip!
+            </h2>
+            <a href="/logout" class="col-sm-1 offset-sm-1" >Logout</a>
+        </div>
+        <hr>
+        
+        <div>
+            <div class="offset-sm-1">
+                {% if messages %}
+                <ul class="messages">
+                {% for message in messages %}
+                    {% if 'create_trip' in message.extra_tags %}
+                    <li {% if message.tags %} class="{{message.tags}}" {%endif%}>{{message}}</li>
+                    {% endif %}
+                {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            
+            
+            <div class="border p-3 col-sm-6 offset-sm-1">
+                <form action="/trips/create_trip" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group row">
+                        <label for="destination" class="col-sm-3">Destination :</label>
+                        <input type="text" class="col-sm-8 form-control" id = "destination" name="destination"
+                            {% if messages %} value="{{request.session.temp_inputs.destination}}" {% endif %}>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="start_date" class="col-sm-3">Start Date :</label>
+                        <input type="date" class="col-sm-8 form-control" id="start_date" name="start_date"
+                        {% if messages %} value="{{request.session.temp_inputs.start_date}}" {% endif %}>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="end_date" class="col-sm-3">End Date :</label>
+                        <input type="date" class="col-sm-8 form-control" id="end_date" name="end_date"
+                        {% if messages %} value="{{request.session.temp_inputs.end_date}}" {% endif %}>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="plan" class="col-sm-3">Plan : </label>
+                        <textarea class="form-control col-sm-8" rows="4" id="plan" 
+                        name="plan">{% if messages %}{{request.session.temp_inputs.plan}}{% endif %}</textarea>
+                    </div>
+
+                    <a href="/dashboard" class="btn btn-danger offset-sm-8 mr-2">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+            
+        </div>
+    </body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Trip Buddy (Edit trip)</title>
+        {% load static %}
+        <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+        <link rel="stylesheet" href="{% static 'trip_buddy_app/css/style.css' %}">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    </head>
+    <body class="container-fluid">
+        <div class="row mt-30 mb-30">
+            <h2 class="col-sm-7 offset-sm-1">Hello {{request.session.user_fname}}!
+                    Let's edit your trip!
+            </h2>
+            <a href="/logout" class="col-sm-1 offset-sm-1" >Logout</a>
+        </div>
+        <hr>
+        
+        <div>
+            <div class="offset-sm-1">
+                {% if messages %}
+                <ul class="messages">
+                {% for message in messages %}
+                    {% if 'edit_trip' in message.extra_tags %}
+                    <li {% if message.tags %} class="{{message.tags}}" {%endif%}>{{message}}</li>
+                    {% endif %}
+                {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            
+            <div class="border p-3 col-sm-6 offset-sm-1">
+                <form action="/trips_edit_trip/{{trip.id}}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group row">
+                        <label for="destination" class="col-sm-3">Destination :</label>
+                        <input type="text" class="col-sm-8 form-control" id = "destination" name="destination"
+                            value="{{trip.destination}}">
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="start_date" class="col-sm-3">Start Date :</label>
+                        <input type="date" class="col-sm-8 form-control" id="start_date" name="start_date"
+                            year="{{trip.start_date.year}}" month= "{{trip.start_date.month}}"
+                            day="{{trip.start_date.day}}" value="">
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="end_date" class="col-sm-3">End Date :</label>
+                        <input type="date" class="col-sm-8 form-control" id="end_date" name="end_date"
+                            year="{{trip.end_date.year}}" month= "{{trip.end_date.month}}"
+                            day="{{trip.end_date.day}}" value="">
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="plan" class="col-sm-3">Plan : </label>
+                        <textarea class="form-control col-sm-8" rows="4" id="plan" 
+                        name="plan">{{trip.plan}}</textarea>
+                    </div>
+
+                    <a href="/dashboard" class="btn btn-danger offset-sm-8 mr-2">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+            
+        </div>
+        <script>
+            $(document).ready(function() {
+                year = $('#start_date').attr("year");
+                month = $('#start_date').attr("month");
+                if (month.length == 1) {
+                    month = "0" + month;
+                }
+                day = $('#start_date').attr("day")
+                if (day.length == 1) {
+                    day = "0" + day;
+                }
+
+                str_date = year + "-" + month +"-" + day;
+                console.log("str_date: "+ str_date);
+                $('#start_date').attr('value', str_date);
+
+                //end date
+                year = $('#end_date').attr("year");
+                month = $('#end_date').attr("month");
+                if (month.length == 1) {
+                    month = "0" + month;
+                }
+                day = $('#end_date').attr("day")
+                if (day.length == 1) {
+                    day = "0" + day;
+                }
+
+                str_date = year + "-" + month +"-" + day;
+                console.log("str_date: "+ str_date);
+                $('#end_date').attr('value', str_date);
+            })
+        </script>
+    </body>
+</html>

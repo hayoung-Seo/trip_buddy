@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Trip Buddy (Trip detail) </title>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'trip_buddy_app/css/style.css' %}">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    </head>
+    <body class="container-fluid">
+        <div class="row mt-30 mb-30">
+            <h2 class="col-sm-6 offset-sm-1">Hello {{request.session.user_fname}}!
+                    Create a trip!
+            </h2>
+            <a href="/dashboard" class="offset-sm-1 col-sm-1">Dashboard</a>
+            <a href="/logout" class="col-sm-1" >Logout</a>
+        </div>
+        <hr>
+        {% load tz %}
+        <div class="col-sm-6 offset-sm-1">
+            <h4>{{trip.destination}}</h4>
+            <div class="border p-3 mt-30 mb-30">
+                <p>Start Date : {{trip.start_date}}</p>
+                <p>End Date : {{trip.end_date}}</p>
+                <p>Created On : {{trip.created_at|timezone:"America/Los_Angeles"}}</p>
+                <p>Last Updated : {{trip.updated_at|timezone:"America/Los_Angeles"}}</p>
+                <p>Plan : {{trip.plan}}</p>
+                <p>Created by : {{trip.user_created.first_name}}</p>
+            </div>
+        </div>
+
+        <div class="col-sm-3 offset-sm-1">
+            <h5>People who've joined the trip</h5>
+            <ul>
+                {% for user in trip.users_joined.all %}
+                    {% if trip.user_created != user %}
+                    <li>{{user.first_name}}</li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    </body>
+</html>
